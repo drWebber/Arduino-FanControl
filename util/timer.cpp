@@ -1,9 +1,5 @@
 #include "timer.h"
 
-Timer::Timer()
-{
-}
-
 void Timer::setSecondsInterval(int seconds)
 {
     this->interval = seconds * 1000;
