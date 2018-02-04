@@ -19,7 +19,7 @@ private:
 protected:
     Pin pin;
 public:
-    Sensor(Pin pin, int threshold);
+    Sensor(Pin dhtPin, int threshold);
     virtual ~Sensor();
     const Pin& getPin() const;
     void setPin(const Pin& pin);
@@ -27,7 +27,7 @@ public:
 
     bool isAboveValue();
     bool isBelowValue();
-    virtual int read();
+    virtual short read();
 };
 
 } /* namespace components */

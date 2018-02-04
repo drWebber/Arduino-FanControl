@@ -15,7 +15,8 @@ void setup() {
 }
 
 void loop() {
-        dht.read();
+    if (dht.read()) {
         Serial.println(dht.getTemperature());
+    }
     delay(500);
 }

@@ -9,8 +9,8 @@
 
 namespace components {
 
-Sensor::Sensor(Pin pin, int threshold) {
-    this->pin = pin;
+components::Sensor::Sensor(Pin dhtPin, int threshold) {
+    this->pin = dhtPin;
     this->threshold = threshold;
 }
 
@@ -38,7 +38,7 @@ void Sensor::setPin(const Pin& pin) {
     this->pin = pin;
 }
 
-int Sensor::read() {
+short Sensor::read() {
     return pin.agRead();
 }
 

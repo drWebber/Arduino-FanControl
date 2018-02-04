@@ -16,6 +16,7 @@ class Pin {
 private:
     char index;
 public:
+    Pin();
     Pin(char index, char mode = INPUT);
     virtual ~Pin();
     void setOutputMode();

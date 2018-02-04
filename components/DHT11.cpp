@@ -13,15 +13,19 @@ namespace components {
 
 } /* namespace components */
 
-float components::DHT11::getHumidity() const {
+components::DHT11::DHT11(Pin dhtPin, int threshold)
+        : Sensor(dhtPin, threshold) {
+}
+
+short components::DHT11::getHumidity() const {
     return humidity;
 }
 
-float components::DHT11::getTemperature() const {
+short components::DHT11::getTemperature() const {
     return temperature;
 }
 
-int components::DHT11::read() {
+short components::DHT11::read() {
     byte data[40];
 
     pin.setOutputMode();
@@ -34,22 +38,22 @@ int components::DHT11::read() {
 
     short timeout = 10000;
     while (pin.dlRead() == LOW)
-        if (timeout-- == 0) throw new TimeoutException();
+        if (timeout-- == 0) return false;
 
     timeout = 10000;
     while (pin.dlRead() == HIGH)
-        if (timeout-- == 0) throw TimeoutException();
+        if (timeout-- == 0) return false;
 
     unsigned long time;
     for (int i = 0; i < 40; i++) {
         timeout = 10000;
         while (pin.dlRead() == LOW)
-              if (timeout-- == 0) throw TimeoutException();
+              if (timeout-- == 0) return false;
 
         time = micros();
         timeout = 10000;
         while (pin.dlRead() == HIGH)
-              if (timeout-- == 0) throw TimeoutException();
+              if (timeout-- == 0) return false;
 
         if ((micros() - time) > 40) {
             data[i] = 1;
@@ -71,8 +75,10 @@ int components::DHT11::read() {
     }
 
     unsigned short sum = bytes[0] + bytes[2];
-    if (bytes[4] != sum) throw ChecksumException();
+    if (bytes[4] != sum) return false;
 
     humidity    = bytes[0];
     temperature = bytes[2];
+
+    return true;
 }
