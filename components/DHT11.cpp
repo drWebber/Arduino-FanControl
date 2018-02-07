@@ -13,7 +13,7 @@ namespace components {
 
 } /* namespace components */
 
-components::DHT11::DHT11(Pin dhtPin, int threshold)
+components::DHT11::DHT11(Pin &dhtPin, int threshold)
         : Sensor(dhtPin, threshold) {
 }
 
@@ -36,24 +36,16 @@ short components::DHT11::read() {
     delayMicroseconds(40);
     pin.setInputMode();
 
-    short timeout = 10000;
-    while (pin.dlRead() == LOW)
-        if (timeout-- == 0) return false;
+    if (!testDevice(LOW)) return false;
 
-    timeout = 10000;
-    while (pin.dlRead() == HIGH)
-        if (timeout-- == 0) return false;
+    if (!testDevice(HIGH)) return false;
 
     unsigned long time;
     for (int i = 0; i < 40; i++) {
-        timeout = 10000;
-        while (pin.dlRead() == LOW)
-              if (timeout-- == 0) return false;
+        if (!testDevice(LOW)) return false;
 
         time = micros();
-        timeout = 10000;
-        while (pin.dlRead() == HIGH)
-              if (timeout-- == 0) return false;
+        if (!testDevice(HIGH)) return false;
 
         if ((micros() - time) > 40) {
             data[i] = 1;
@@ -80,5 +72,12 @@ short components::DHT11::read() {
     humidity    = bytes[0];
     temperature = bytes[2];
 
+    return true;
+}
+
+bool components::DHT11::testDevice(char value) {
+    short timeout = 10000;
+    while (pin.dlRead() == value)
+        if (timeout-- == 0) return false;
     return true;
 }

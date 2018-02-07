@@ -17,8 +17,9 @@ class DHT11: public Sensor {
 private:
     char temperature;
     char humidity;
+    bool testDevice(char value);
 public:
-    DHT11(Pin dhtPin, int threshold);
+    DHT11(Pin &dhtPin, int threshold);
     short read();
     short getHumidity() const;
     short getTemperature() const;

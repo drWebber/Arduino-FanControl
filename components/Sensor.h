@@ -19,10 +19,10 @@ private:
 protected:
     Pin pin;
 public:
-    Sensor(Pin dhtPin, int threshold);
+    Sensor(Pin &dhtPin, int threshold);
     virtual ~Sensor();
     const Pin& getPin() const;
-    void setPin(const Pin& pin);
+    void setPin(const Pin &pin);
     void setThreshold(int threshold);
 
     bool isAboveValue();
