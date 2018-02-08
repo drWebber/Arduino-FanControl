@@ -13,7 +13,7 @@ namespace components {
 
 } /* namespace components */
 
-components::DHT11::DHT11(Pin &dhtPin, int threshold)
+components::DHT11::DHT11(Pin *dhtPin, int threshold)
         : Sensor(dhtPin, threshold) {
 }
 
@@ -28,13 +28,13 @@ short components::DHT11::getTemperature() const {
 short components::DHT11::read() {
     byte data[40];
 
-    pin.setOutputMode();
-    pin.setLow();
+    pin->setOutputMode();
+    pin->setLow();
     delay(18);
 
-    pin.setHigh();
+    pin->setHigh();
     delayMicroseconds(40);
-    pin.setInputMode();
+    pin->setInputMode();
 
     if (!testDevice(LOW)) return false;
 
@@ -77,7 +77,7 @@ short components::DHT11::read() {
 
 bool components::DHT11::testDevice(char value) {
     short timeout = 10000;
-    while (pin.dlRead() == value)
+    while (pin->dlRead() == value)
         if (timeout-- == 0) return false;
     return true;
 }

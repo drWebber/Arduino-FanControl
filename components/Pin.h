@@ -14,7 +14,7 @@ namespace components {
 
 class Pin {
 private:
-    char index;
+    char index = 0;
 public:
     Pin();
     Pin(char index, char mode = INPUT);

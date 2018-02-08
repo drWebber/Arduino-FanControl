@@ -17,12 +17,12 @@ class Sensor {
 private:
     int threshold;
 protected:
-    Pin pin;
+    Pin *pin;
 public:
-    Sensor(Pin &dhtPin, int threshold);
+    Sensor(Pin *dhtPin, int threshold);
     virtual ~Sensor();
-    const Pin& getPin() const;
-    void setPin(const Pin &pin);
+    const Pin *getPin() const;
+    void setPin(const Pin *pin);
     void setThreshold(int threshold);
 
     bool isAboveValue();

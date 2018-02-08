@@ -8,9 +8,6 @@
 
 namespace components {
 
-Pin::Pin() {
-}
-
 Pin::Pin(char index, char mode) {
     this->index = index;
     if (mode != INPUT) {

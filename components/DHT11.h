@@ -15,11 +15,11 @@ namespace components {
 
 class DHT11: public Sensor {
 private:
-    char temperature;
-    char humidity;
+    char temperature = 0;
+    char humidity = 0;
     bool testDevice(char value);
 public:
-    DHT11(Pin &dhtPin, int threshold);
+    DHT11(Pin *dhtPin, int threshold);
     short read();
     short getHumidity() const;
     short getTemperature() const;

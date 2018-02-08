@@ -3,14 +3,14 @@
 #include "util/Timer.h"
 #include "components/Pin.h"
 #include "components/DHT11.h"
+#include "components/Relay.h"
 
 using namespace components;
 
-Pin dhtPin = Pin(5);
-DHT11 dht = DHT11(dhtPin, 10);
+DHT11 dht = DHT11(new Pin(5), 10);
+Relay relay = Relay(new Pin(4));
 
 void setup() {
-    dht.setPin(dhtPin);
     Serial.begin(9600); /* debug */
 }
 
@@ -18,5 +18,8 @@ void loop() {
     if (dht.read()) {
         Serial.println(dht.getTemperature());
     }
-    delay(500);
+//    delay(500);
+//    relay.turnOn();
+//    delay(500);
+//    relay.turnOff();
 }

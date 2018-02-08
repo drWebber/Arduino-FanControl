@@ -9,7 +9,7 @@
 
 namespace components {
 
-components::Sensor::Sensor(Pin &dhtPin, int threshold) {
+components::Sensor::Sensor(Pin *dhtPin, int threshold) {
     this->pin = dhtPin;
     this->threshold = threshold;
 }
@@ -30,16 +30,16 @@ bool Sensor::isBelowValue() {
     return read() <= threshold;
 }
 
-const Pin &Sensor::getPin() const {
+const Pin *Sensor::getPin() const {
     return pin;
 }
 
-void Sensor::setPin(const Pin &pin) {
+void Sensor::setPin(const Pin *pin) {
     this->pin = pin;
 }
 
 short Sensor::read() {
-    return pin.agRead();
+    return pin->agRead();
 }
 
 } /* namespace components */
