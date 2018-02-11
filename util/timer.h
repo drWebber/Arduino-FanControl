@@ -1,18 +1,22 @@
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef COMPONENTS_TIMER_H
+#define COMPONENTS_TIMER_H
 
 #include <Arduino.h>
 
+namespace components {
+
 class Timer
 {
-public:
-    Timer();
-    void setSecondsInterval(int seconds);
-    void setMinutesInterval(int minutes);
-    boolean isTimeOut();
 private:
-    unsigned long interval;
-    unsigned long nextEvent;
+    unsigned long interval = 0;
+    unsigned long nextEvent = 0;
+public:
+    Timer() {};
+    void setSecondsInterval(short seconds);
+    void setMinutesInterval(short minutes);
+    boolean isTimeOut();
 };
 
-#endif // TIMER_H
+} /* namespace components */
+
+#endif // COMPONENTS_TIMER_H

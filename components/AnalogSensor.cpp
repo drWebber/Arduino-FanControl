@@ -5,40 +5,40 @@
  *      Author: Макс
  */
 
-#include "Sensor.h"
+#include "AnalogSensor.h"
 
 namespace components {
 
-components::Sensor::Sensor(Pin *dhtPin, int threshold) {
+components::AnalogSensor::AnalogSensor(Pin *dhtPin, int threshold) {
     this->pin = dhtPin;
     this->threshold = threshold;
 }
 
-void Sensor::setThreshold(int threshold) {
+void AnalogSensor::setThreshold(short threshold) {
     this->threshold = threshold;
 }
 
-Sensor::~Sensor() {
+AnalogSensor::~AnalogSensor() {
     // TODO Auto-generated destructor stub
 }
 
-bool Sensor::isAboveValue() {
-    return read() > threshold;
+bool AnalogSensor::isAboveValue() {
+    return !isBelowValue();
 }
 
-bool Sensor::isBelowValue() {
+bool AnalogSensor::isBelowValue() {
     return read() <= threshold;
 }
 
-const Pin *Sensor::getPin() const {
+const Pin *AnalogSensor::getPin() const {
     return pin;
 }
 
-void Sensor::setPin(const Pin *pin) {
+void AnalogSensor::setPin(const Pin *pin) {
     this->pin = pin;
 }
 
-short Sensor::read() {
+short AnalogSensor::read() {
     return pin->agRead();
 }
 

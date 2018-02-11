@@ -6,15 +6,13 @@
  */
 
 #include "DHT11.h"
-#include "exceptions/TimeoutException.h"
-#include "exceptions/ChecksumException.h"
 
 namespace components {
 
 } /* namespace components */
 
-components::DHT11::DHT11(Pin *dhtPin, int threshold)
-        : Sensor(dhtPin, threshold) {
+components::DHT11::DHT11(Pin *dhtPin) {
+    this->pin = dhtPin;
 }
 
 short components::DHT11::getHumidity() const {
@@ -80,4 +78,23 @@ bool components::DHT11::testDevice(char value) {
     while (pin->dlRead() == value)
         if (timeout-- == 0) return false;
     return true;
+}
+
+bool components::DHT11::isAboveValue() {
+    return !isBelowValue();
+}
+
+bool components::DHT11::isBelowValue() {
+    if (temperature <= temperatureThreshold && humidity <= humidityThreshold) {
+        return true;
+    }
+    return false;
+}
+
+void components::DHT11::setHumidityThreshold(char humidityThreshold) {
+    this->humidityThreshold = humidityThreshold;
+}
+
+void components::DHT11::setTemperatureThreshold(char temperatureThreshold) {
+    this->temperatureThreshold = temperatureThreshold;
 }

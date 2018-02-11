@@ -1,25 +1,29 @@
 #include <Arduino.h>
 
-#include "util/Timer.h"
 #include "components/Pin.h"
 #include "components/DHT11.h"
 #include "components/Relay.h"
+#include "components/Fan.h"
 
 using namespace components;
 
-DHT11 dht = DHT11(new Pin(5), 10);
-Relay relay = Relay(new Pin(4));
+DHT11 *dht = new DHT11(new Pin(5));
+AnalogSensor *mqSensor = new AnalogSensor(new Pin(A6), 300);
+AnalogSensor *lightSensor = new AnalogSensor(new Pin(A7), 900);
+Relay *relay = new Relay(new Pin(4));
+Fan fan = Fan(relay);
 
 void setup() {
-    Serial.begin(9600); /* debug */
+    fan.setLightSensor(lightSensor);
+    fan.setMqSensor(mqSensor);
+    dht->setHumidityThreshold(70);
+    dht->setTemperatureThreshold(27);
+    fan.setDht(dht);
+    Serial.begin(9600);  //TODO debug
 }
 
 void loop() {
-    if (dht.read()) {
-        Serial.println(dht.getTemperature());
-    }
-//    delay(500);
-//    relay.turnOn();
-//    delay(500);
-//    relay.turnOff();
+    fan.serve();
+    Serial.println("-----------------------");  //TODO debug
+    delay(5000); //TODO debug
 }

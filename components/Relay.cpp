@@ -28,11 +28,11 @@ Relay::~Relay() {
 }
 
 void Relay::turnOff() {
-    pin->setLow();
+    pin->setHigh();
 }
 
 void Relay::turnOn() {
-    pin->setHigh();
+    pin->setLow();
 }
 
 } /* namespace components */
