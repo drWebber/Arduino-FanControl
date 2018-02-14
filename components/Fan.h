@@ -18,24 +18,19 @@ namespace components {
 class Fan {
 private:
     Relay *relay = NULL;
-    DHT11 *dht = NULL;
-    AnalogSensor *mqSensor = NULL;
-    AnalogSensor *lightSensor = NULL;
-    bool isTurnedOn = false;
+    bool turnedOn = false;
     Timer *timer = NULL;
-
-    void turnOn(short minutes);
-    void turnOff();
-    bool isRequireVentilation();
 public:
     Fan(Relay *relay);
     virtual ~Fan();
-    void setDht(const DHT11 *dht);
-    void setLightSensor(const AnalogSensor *lightSensor);
-    void setMqSensor(const AnalogSensor *mqSensor);
     void setRelay(const Relay *relay);
 
-    void serve();
+    void turnOn(short minutes);
+    void turnOff();
+
+    bool isTurnedOn();
+
+    Timer *getTimer();
 };
 
 } /* namespace components */

@@ -21,8 +21,8 @@ public:
     const Pin *getPin() const;
     void setPin(const Pin *pin);
 
-    void turnOff();
-    void turnOn();
+    void switchOff();
+    void switchOn();
 };
 
 } /* namespace components */

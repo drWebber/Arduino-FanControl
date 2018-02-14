@@ -27,11 +27,11 @@ Relay::~Relay() {
     // TODO Auto-generated destructor stub
 }
 
-void Relay::turnOff() {
+void Relay::switchOff() {
     pin->setHigh();
 }
 
-void Relay::turnOn() {
+void Relay::switchOn() {
     pin->setLow();
 }
 
