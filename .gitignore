@@ -34,3 +34,15 @@
 # Dirs
 build/
 /build/*
+core/
+/core/*
+libraries/
+/libraries/*
+Release/
+/Release/*
+.settings/
+/.settings/*
+
+# Files
+*.cproject
+*.project
