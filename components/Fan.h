@@ -2,7 +2,7 @@
  * Fan.h
  *
  *  Created on: 8 февр. 2018 г.
- *      Author: Макс
+ *      Author: Maksim Fedarenka
  */
 
 #ifndef COMPONENTS_FAN_H_
@@ -23,9 +23,9 @@ private:
 public:
     Fan(Relay *relay);
     virtual ~Fan();
-    void setRelay(const Relay *relay);
+    void setRelay(Relay *relay);
 
-    void turnOn(short minutes);
+    void turnOn(uint8_t minutes);
     void turnOff();
 
     bool isTurnedOn();

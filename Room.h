@@ -27,10 +27,10 @@ public:
     Room();
     virtual ~Room();
 
-    void setDht(const DHT11 *dht);
-    void setLightSensor(const AnalogSensor *lightSensor);
-    void setMqSensor(const AnalogSensor *mqSensor);
-    void setFan(const Fan *fan);
+    void setDht(DHT11 *dht);
+    void setLightSensor(AnalogSensor *lightSensor);
+    void setMqSensor(AnalogSensor *mqSensor);
+    void setFan(Fan *fan);
 
     void serve();
 	const DHT11 *getDht() const;

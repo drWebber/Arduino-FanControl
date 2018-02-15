@@ -18,19 +18,19 @@ Room::~Room() {
     // TODO Auto-generated destructor stub
 }
 
-void Room::setDht(const DHT11* dht) {
+void Room::setDht(DHT11* dht) {
     this->dht = dht;
 }
 
-void Room::setLightSensor(const AnalogSensor* lightSensor) {
+void Room::setLightSensor(AnalogSensor* lightSensor) {
     this->lightSensor = lightSensor;
 }
 
-void Room::setMqSensor(const AnalogSensor* mqSensor) {
+void Room::setMqSensor(AnalogSensor* mqSensor) {
     this->mqSensor = mqSensor;
 }
 
-void Room::setFan(const Fan *fan) {
+void Room::setFan(Fan *fan) {
     this->fan = fan;
 }
 

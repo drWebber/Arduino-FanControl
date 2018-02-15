@@ -1,10 +1,3 @@
-/*
- * Fan.cpp
- *
- *  Created on: 8 февр. 2018 г.
- *      Author: Макс
- */
-
 #include "Fan.h"
 
 namespace components {
@@ -13,7 +6,7 @@ Fan::Fan(Relay *relay) {
     this->relay = relay;
 }
 
-void Fan::setRelay(const Relay *relay) {
+void Fan::setRelay(Relay *relay) {
     this->relay = relay;
 }
 
@@ -25,7 +18,7 @@ Timer *Fan::getTimer() {
     return timer;
 }
 
-void Fan::turnOn(short minutes) {
+void Fan::turnOn(uint8_t minutes) {
     Serial.println("Fan is turned on"); //TODO debug
     turnedOn = true;
     relay->switchOn();

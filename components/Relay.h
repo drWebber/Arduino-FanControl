@@ -2,7 +2,7 @@
  * Relay.h
  *
  *  Created on: 8 февр. 2018 г.
- *      Author: Макс
+ *      Author: Maksim Fedarenka
  */
 
 #ifndef COMPONENTS_RELAY_H_
@@ -19,7 +19,7 @@ public:
     Relay(Pin *pin);
     virtual ~Relay();
     const Pin *getPin() const;
-    void setPin(const Pin *pin);
+    void setPin(Pin *pin);
 
     void switchOff();
     void switchOn();

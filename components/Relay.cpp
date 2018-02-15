@@ -9,7 +9,7 @@
 
 namespace components {
 
-components::Relay::Relay(Pin *pin) {
+Relay::Relay(Pin *pin) {
     this->pin = pin;
     pin->setOutputMode();
     pin->setHigh();
@@ -19,7 +19,7 @@ const Pin *Relay::getPin() const {
     return pin;
 }
 
-void Relay::setPin(const Pin *pin) {
+void Relay::setPin(Pin *pin) {
     this->pin = pin;
 }
 

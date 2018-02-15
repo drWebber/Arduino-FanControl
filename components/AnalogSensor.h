@@ -2,7 +2,7 @@
  * Sensor.h
  *
  *  Created on: 4 февр. 2018 г.
- *      Author: Макс
+ *      Author: Maksim Fedarenka
  */
 
 #ifndef COMPONENTS_ANALOGSENSOR_H_
@@ -16,17 +16,17 @@ namespace components {
 class AnalogSensor {
 private:
     Pin *pin;
-    int threshold;
+    uint16_t threshold;
 public:
-    AnalogSensor(Pin *dhtPin, int threshold);
+    AnalogSensor(Pin *dhtPin, uint16_t threshold);
     virtual ~AnalogSensor();
     const Pin *getPin() const;
     void setPin(const Pin *pin);
-    void setThreshold(short threshold);
+    void setThreshold(uint16_t threshold);
 
     virtual bool isAboveValue();
     virtual bool isBelowValue();
-    virtual short read();
+    virtual uint16_t read();
 };
 
 } /* namespace components */

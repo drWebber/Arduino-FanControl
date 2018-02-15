@@ -2,13 +2,13 @@
 
 namespace components {
 
-void Timer::setSecondsInterval(short seconds)
+void Timer::setSecondsInterval(uint8_t seconds)
 {
     this->interval = seconds * 1000;
     nextEvent = millis() + interval;
 }
 
-void Timer::setMinutesInterval(short minutes)
+void Timer::setMinutesInterval(uint8_t minutes)
 {
     interval = minutes * 60000;
     nextEvent = millis() + interval;

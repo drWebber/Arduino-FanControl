@@ -1,8 +1,8 @@
 /*
- * Pin.h
+ * Relay.h
  *
- *  Created on: 4 февр. 2018 г.
- *      Author: Макс
+ *  Created on: 8 февр. 2018 г.
+ *      Author: Maksim Fedarenka
  */
 
 #include <Arduino.h>
@@ -14,20 +14,20 @@ namespace components {
 
 class Pin {
 private:
-    char index = 0;
+	uint8_t index = 0;
 public:
     Pin();
-    Pin(char index, char mode = INPUT);
+    Pin(uint8_t index, uint8_t mode = INPUT);
     virtual ~Pin();
     void setOutputMode();
     void setInputMode();
 
     void setHigh();
     void setLow();
-    void setValue(int value);
+    void setValue(uint8_t value);
 
-    char dlRead();
-    int agRead();
+    uint8_t dlRead();
+    uint16_t agRead();
 };
 
 } /* namespace components */

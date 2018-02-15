@@ -12,8 +12,8 @@ private:
     unsigned long nextEvent = 0;
 public:
     Timer() {};
-    void setSecondsInterval(short seconds);
-    void setMinutesInterval(short minutes);
+    void setSecondsInterval(uint8_t seconds);
+    void setMinutesInterval(uint8_t minutes);
     boolean isTimeOut();
 };
 

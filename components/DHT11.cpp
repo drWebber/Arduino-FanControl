@@ -1,29 +1,20 @@
-/*
- * DHT11.cpp
- *
- *  Created on: 4 февр. 2018 г.
- *      Author: Макс
- */
-
 #include "DHT11.h"
 
 namespace components {
 
-} /* namespace components */
-
-components::DHT11::DHT11(Pin *dhtPin) {
+DHT11::DHT11(Pin *dhtPin) {
     this->pin = dhtPin;
 }
 
-short components::DHT11::getHumidity() const {
+uint8_t DHT11::getHumidity() const {
     return humidity;
 }
 
-short components::DHT11::getTemperature() const {
+uint8_t DHT11::getTemperature() const {
     return temperature;
 }
 
-short components::DHT11::read() {
+uint8_t DHT11::read() {
     byte data[40];
 
     pin->setOutputMode();
@@ -73,28 +64,30 @@ short components::DHT11::read() {
     return true;
 }
 
-bool components::DHT11::testDevice(char value) {
+bool DHT11::testDevice(char value) {
     short timeout = 10000;
     while (pin->dlRead() == value)
         if (timeout-- == 0) return false;
     return true;
 }
 
-bool components::DHT11::isAboveValue() {
+bool DHT11::isAboveValue() {
     return !isBelowValue();
 }
 
-bool components::DHT11::isBelowValue() {
+bool DHT11::isBelowValue() {
     if (temperature <= temperatureThreshold && humidity <= humidityThreshold) {
         return true;
     }
     return false;
 }
 
-void components::DHT11::setHumidityThreshold(char humidityThreshold) {
+void DHT11::setHumidityThreshold(uint8_t humidityThreshold) {
     this->humidityThreshold = humidityThreshold;
 }
 
-void components::DHT11::setTemperatureThreshold(char temperatureThreshold) {
+void DHT11::setTemperatureThreshold(uint8_t temperatureThreshold) {
     this->temperatureThreshold = temperatureThreshold;
 }
+
+} /* namespace components */
