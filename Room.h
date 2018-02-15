@@ -33,6 +33,9 @@ public:
     void setFan(const Fan *fan);
 
     void serve();
+	const DHT11 *getDht() const;
+	const AnalogSensor *getLightSensor() const;
+	const AnalogSensor *getMqSensor() const;
 };
 
 } /* namespace components */

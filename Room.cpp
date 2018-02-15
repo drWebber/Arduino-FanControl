@@ -85,4 +85,16 @@ bool Room::isRequiredVentilation() {
     return false;
 }
 
+const DHT11 *Room::getDht() const {
+	return dht;
+}
+
+const AnalogSensor *Room::getLightSensor() const {
+	return lightSensor;
+}
+
+const AnalogSensor *Room::getMqSensor() const {
+	return mqSensor;
+}
+
 } /* namespace components */
