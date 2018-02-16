@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-namespace components {
+namespace util {
 
 void Timer::setSecondsInterval(uint8_t seconds)
 {
@@ -14,7 +14,7 @@ void Timer::setMinutesInterval(uint8_t minutes)
     nextEvent = millis() + interval;
 }
 
-boolean Timer::isTimeOut()
+bool Timer::isTimeOut()
 {
     if (millis() > nextEvent) {
         nextEvent = millis() + interval;
@@ -23,4 +23,4 @@ boolean Timer::isTimeOut()
     return false;
 }
 
-} /* namespace components */
+} /* namespace util */
