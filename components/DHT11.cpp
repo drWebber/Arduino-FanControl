@@ -14,7 +14,7 @@ uint8_t DHT11::getTemperature() const {
     return temperature;
 }
 
-uint8_t DHT11::read() {
+bool DHT11::read() {
     byte data[40];
 
     pin->setOutputMode();

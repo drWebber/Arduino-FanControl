@@ -14,7 +14,7 @@ Fan::~Fan() {
     // TODO Auto-generated destructor stub
 }
 
-Timer *Fan::getTimer() {
+util::Timer *Fan::getTimer() {
     return timer;
 }
 
@@ -22,7 +22,7 @@ void Fan::turnOn(uint8_t minutes) {
     Serial.println("Fan is turned on"); //TODO debug
     turnedOn = true;
     relay->switchOn();
-    timer = new Timer();
+    timer = new util::Timer();
     timer->setMinutesInterval(minutes);
 }
 
