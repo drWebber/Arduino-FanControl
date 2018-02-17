@@ -36,9 +36,9 @@ void setup() {
 	bathroom.setFan(fan);
 
 	Serial.begin(9600);  //TODO debug
-	tempLogger  = new EepromLogger(0, 200, 2);
-	humidLogger = new EepromLogger(400, 200, 2);
-	smokeLogger = new EepromLogger(800, 200, 2);
+	tempLogger  = new EepromLogger(0, 100, 2, 1024);
+	humidLogger = new EepromLogger(200, 100, 2, 1024);
+	smokeLogger = new EepromLogger(400, 100, 2, 1024);
 
 	tempWatcher = new ValueWatcher(tempLogger, 30,
 	        LogType::VALUE_FALLING);
@@ -86,4 +86,5 @@ void loop() {
             smokeLogger->clearLog();
         }
     }
+	delay(1000);
 }

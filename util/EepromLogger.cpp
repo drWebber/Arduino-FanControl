@@ -10,13 +10,21 @@
 namespace util {
 
 EepromLogger::EepromLogger(uint16_t startIndex, int16_t size,
-        uint8_t objectSize) {
+        uint8_t objectSize, uint16_t eepromCapacity) {
     minValIndex = startIndex;
     maxValIndex = minValIndex + objectSize;
     nextIndex = maxValIndex + objectSize;
     lastValIndex = startIndex + (size * objectSize);
-    int16_t tmpMmin = EEPROM.read(minValIndex);
-    int16_t tmpMax = EEPROM.read(maxValIndex);
+    if (lastValIndex > eepromCapacity - 1) {
+        Serial.println("EepromLogger::EepromLogger ERROR");
+        Serial.println("The eeprom memory has lower capacity, than you need!!! "
+                "The data couldn't be properly stored. "
+                "Some data would be lost");
+        lastValIndex = eepromCapacity - 1;
+    }
+    int16_t tmpMmin, tmpMax = 0;
+    EEPROM.get(minValIndex, tmpMmin);
+    EEPROM.get(maxValIndex, tmpMax);
     if (tmpMmin == tmpMax) {
         minimum = INT16_MAX;
         maximum = INT16_MIN;
@@ -57,33 +65,33 @@ void EepromLogger::writeNextValue(int16_t value) {
 }
 
 void EepromLogger::printLog() const {
-    int16_t val = 0;
+    int16_t val = INT16_MIN;
     Serial.print("Min value: ");
-    val = EEPROM.get(minValIndex, val);
+    EEPROM.get(minValIndex, val);
     Serial.println(val);
     Serial.print("Max value: ");
-    val = EEPROM.get(maxValIndex, val);
+    EEPROM.get(maxValIndex, val);
     Serial.println(val);
 }
 
 void EepromLogger::clearLog() {
     for (int16_t i = minValIndex; i < lastValIndex; ++i) {
-        EEPROM.write(i, 0);
+        EEPROM.update(i, 0);
     }
-    maximum = INT16_MIN;
     minimum = INT16_MAX;
+    maximum = INT16_MIN;
 }
 
 void EepromLogger::clearChangesLog() {
     int16_t indx = maxValIndex + objectSize;
     nextIndex = indx;
     for (int16_t i = indx; i < lastValIndex; ++i) {
-        EEPROM.write(i, 0);
+        EEPROM.update(i, 0);
     }
 }
 
 void EepromLogger::printChangesLog() const {
-    int16_t val = 0;
+    int16_t val = INT16_MIN;
     for (int16_t i = (maxValIndex + objectSize); i < lastValIndex;
             i += objectSize) {
         EEPROM.get(i, val);

@@ -34,19 +34,22 @@ namespace util {
     EEPROM равна 1 байту, для хранения 2 и более байт нужно занять несколько
     ячеек! Например, для хранения int16_t, необходимо (есессно) передать двойку
     в этом параметре.
+
+    eepromCapacity - размер EEPROM памяти, для atmega328 это 1024 байта.
 */
 
 class EepromLogger {
 private:
     int16_t minimum = INT16_MAX;
 	int16_t maximum = INT16_MIN;
-	int16_t minValIndex;
-	int16_t maxValIndex;
-	int16_t lastValIndex;
-	int16_t nextIndex;
-	uint8_t objectSize;
+	uint16_t minValIndex;
+	uint16_t maxValIndex;
+	uint16_t lastValIndex;
+	uint16_t nextIndex;
+	uint16_t objectSize;
 public:
-    EepromLogger(uint16_t startIndex, int16_t capacity, uint8_t objectSize);
+    EepromLogger(uint16_t startIndex, int16_t capacity, uint8_t objectSize,
+            uint16_t eepromCapacity);
     virtual ~EepromLogger();
 
     int16_t getMin() const;
