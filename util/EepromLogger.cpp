@@ -14,6 +14,15 @@ EepromLogger::EepromLogger(uint16_t startIndex, int16_t size) {
     maxValIndex = minValIndex + 1;
     nextIndex = maxValIndex + 1;
     lastValIndex = startIndex + size;
+    int16_t tmpMax = EEPROM.read(maxValIndex);
+    int16_t tmpMmin = EEPROM.read(minValIndex);
+    if (tmpMmin == tmpMax) {
+        minimum = INT16_MAX;
+        maximum = INT16_MIN;
+    } else {
+        minimum = tmpMmin;
+        maximum = tmpMax;
+    }
 }
 
 int16_t EepromLogger::getMin() const {

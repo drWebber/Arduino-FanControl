@@ -31,7 +31,7 @@ namespace util {
 
 class EepromLogger {
 private:
-	int16_t minimum = INT16_MAX;
+    int16_t minimum = INT16_MAX;
 	int16_t maximum = INT16_MIN;
 	int16_t minValIndex;
 	int16_t maxValIndex;

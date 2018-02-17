@@ -36,9 +36,9 @@ void setup() {
 	bathroom.setFan(fan);
 
 	Serial.begin(9600);  //TODO debug
-	tempLogger  = new EepromLogger(0, 50);
-	humidLogger = new EepromLogger(50, 50);
-	smokeLogger = new EepromLogger(100, 50);
+	tempLogger  = new EepromLogger(0, 200);
+	humidLogger = new EepromLogger(200, 200);
+	smokeLogger = new EepromLogger(400, 200);
 
 	tempWatcher = new ValueWatcher(tempLogger, 30,
 	        LogType::VALUE_FALLING);
@@ -51,7 +51,7 @@ void setup() {
 void loop() {
 	bathroom.serve();
 
-	delay(500);
+	delay(250);
 	if (bathroom.getDht()->read()) {
 	    uint8_t humidity = bathroom.getDht()->getHumidity();
 	    uint8_t temperature = bathroom.getDht()->getTemperature();
@@ -83,6 +83,4 @@ void loop() {
             smokeLogger->clearLog();
         }
     }
-
-	delay(1000); //TODO debug
 }
