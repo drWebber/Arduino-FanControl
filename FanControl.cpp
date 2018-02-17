@@ -83,4 +83,6 @@ void loop() {
             smokeLogger->clearLog();
         }
     }
+
+	delay(1000); //TODO debug
 }
