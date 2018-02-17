@@ -77,7 +77,8 @@ bool Room::isRequiredVentilation() {
                 return true;
             }
         }
-    } else if (mqSensor->isAboveValue()) {
+    }
+    if (mqSensor->isAboveValue()) {
         Serial.println("Cigarette smoke is detected"); //TODO debug
         return true;
     }

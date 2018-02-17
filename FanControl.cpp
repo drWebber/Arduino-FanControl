@@ -12,7 +12,7 @@ using namespace components;
 using namespace util;
 
 DHT11 *dht = new DHT11(new Pin(5));
-AnalogSensor *mqSensor = new AnalogSensor(new Pin(A6), 300);
+AnalogSensor *mqSensor = new AnalogSensor(new Pin(A6), 500);
 AnalogSensor *lightSensor = new AnalogSensor(new Pin(A7), 900);
 Relay *relay = new Relay(new Pin(4));
 Fan *fan = new Fan(relay);
@@ -30,15 +30,15 @@ ValueWatcher *smokeWatcher;
 void setup() {
 	bathroom.setLightSensor(lightSensor);
 	bathroom.setMqSensor(mqSensor);
-	dht->setHumidityThreshold(70);
+	dht->setHumidityThreshold(85);
 	dht->setTemperatureThreshold(27);
 	bathroom.setDht(dht);
 	bathroom.setFan(fan);
 
 	Serial.begin(9600);  //TODO debug
-	tempLogger  = new EepromLogger(0, 200);
-	humidLogger = new EepromLogger(200, 200);
-	smokeLogger = new EepromLogger(400, 200);
+	tempLogger  = new EepromLogger(0, 200, 2);
+	humidLogger = new EepromLogger(400, 200, 2);
+	smokeLogger = new EepromLogger(800, 200, 2);
 
 	tempWatcher = new ValueWatcher(tempLogger, 30,
 	        LogType::VALUE_FALLING);
@@ -64,7 +64,10 @@ void loop() {
 	} else {
         Serial.println("DHT READING ERROR");
 	}
-	smokeWatcher->log(bathroom.getMqSensor()->read());
+	int16_t air = bathroom.getMqSensor()->read();
+	smokeWatcher->log(air);
+    Serial.print("air: ");
+    Serial.println(air);
 	Serial.println("-----------------------");  //TODO debug
 
 	if (Serial.available()) {
@@ -83,6 +86,4 @@ void loop() {
             smokeLogger->clearLog();
         }
     }
-
-	delay(1000); //TODO debug
 }

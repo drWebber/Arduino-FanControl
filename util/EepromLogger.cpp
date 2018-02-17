@@ -9,13 +9,14 @@
 
 namespace util {
 
-EepromLogger::EepromLogger(uint16_t startIndex, int16_t size) {
+EepromLogger::EepromLogger(uint16_t startIndex, int16_t size,
+        uint8_t objectSize) {
     minValIndex = startIndex;
-    maxValIndex = minValIndex + 1;
-    nextIndex = maxValIndex + 1;
-    lastValIndex = startIndex + size;
-    int16_t tmpMax = EEPROM.read(maxValIndex);
+    maxValIndex = minValIndex + objectSize;
+    nextIndex = maxValIndex + objectSize;
+    lastValIndex = startIndex + (size * objectSize);
     int16_t tmpMmin = EEPROM.read(minValIndex);
+    int16_t tmpMax = EEPROM.read(maxValIndex);
     if (tmpMmin == tmpMax) {
         minimum = INT16_MAX;
         maximum = INT16_MIN;
@@ -23,6 +24,7 @@ EepromLogger::EepromLogger(uint16_t startIndex, int16_t size) {
         minimum = tmpMmin;
         maximum = tmpMax;
     }
+    this->objectSize = objectSize;
 }
 
 int16_t EepromLogger::getMin() const {
@@ -39,26 +41,29 @@ EepromLogger::~EepromLogger() {
 
 void EepromLogger::writeMin(int16_t minimum) {
     this->minimum = minimum;
-    EEPROM.write(minValIndex, minimum);
+    EEPROM.put(minValIndex, minimum);
 }
 
 void EepromLogger::writeMax(int16_t maximum) {
     this->maximum = maximum;
-    EEPROM.write(maxValIndex, maximum);
+    EEPROM.put(maxValIndex, maximum);
 }
 
 void EepromLogger::writeNextValue(int16_t value) {
     if (nextIndex < lastValIndex) {
-        EEPROM.write(nextIndex, value);
-        nextIndex++;
+        EEPROM.put(nextIndex, value);
+        nextIndex += objectSize;
     }
 }
 
 void EepromLogger::printLog() const {
+    int16_t val = 0;
     Serial.print("Min value: ");
-    Serial.println(EEPROM.read(minValIndex));
+    val = EEPROM.get(minValIndex, val);
+    Serial.println(val);
     Serial.print("Max value: ");
-    Serial.println(EEPROM.read(maxValIndex));
+    val = EEPROM.get(maxValIndex, val);
+    Serial.println(val);
 }
 
 void EepromLogger::clearLog() {
@@ -70,7 +75,7 @@ void EepromLogger::clearLog() {
 }
 
 void EepromLogger::clearChangesLog() {
-    int16_t indx = maxValIndex + 1;
+    int16_t indx = maxValIndex + objectSize;
     nextIndex = indx;
     for (int16_t i = indx; i < lastValIndex; ++i) {
         EEPROM.write(i, 0);
@@ -78,8 +83,11 @@ void EepromLogger::clearChangesLog() {
 }
 
 void EepromLogger::printChangesLog() const {
-    for (int16_t i = (maxValIndex + 1); i < lastValIndex; ++i) {
-        Serial.print(EEPROM.read(i));
+    int16_t val = 0;
+    for (int16_t i = (maxValIndex + objectSize); i < lastValIndex;
+            i += objectSize) {
+        EEPROM.get(i, val);
+        Serial.print(val);
         Serial.print(" ");
     }
     Serial.println();

@@ -22,11 +22,18 @@ namespace util {
     хранения истории изменений показаний датчика (кол-во зависит от capacity)
 
     startIndex - начальный индекс для сохранения логов, выбирать АККУРАТНО,
-    чтобы не затереть чужие логи!
+    чтобы не затереть чужие логи! При расчете УЧИТЫВАТЬ objectSize * capacity
+    предыдущих логгеров!
 
     capacity - кол-во отведенных под хранение ячеек памяти, в методе writeValue
     используется относительная система исчисления, при выходе за вместимость
-    данные записываться не будут.
+    данные записываться не будут. Выбирать с учетом objectSize и остаточной
+    вместимости EEPROM.
+
+    objectSize - размер одного сохраняемого объекта в байтах. Одна ячейка
+    EEPROM равна 1 байту, для хранения 2 и более байт нужно занять несколько
+    ячеек! Например, для хранения int16_t, необходимо (есессно) передать двойку
+    в этом параметре.
 */
 
 class EepromLogger {
@@ -37,8 +44,9 @@ private:
 	int16_t maxValIndex;
 	int16_t lastValIndex;
 	int16_t nextIndex;
+	uint8_t objectSize;
 public:
-    EepromLogger(uint16_t startIndex, int16_t capacity);
+    EepromLogger(uint16_t startIndex, int16_t capacity, uint8_t objectSize);
     virtual ~EepromLogger();
 
     int16_t getMin() const;
