@@ -1,7 +1,7 @@
 /*
  * Relay.h
  *
- *  Created on: 8 февр. 2018 г.
+ *  Created on: 8 пїЅпїЅпїЅпїЅ. 2018 пїЅ.
  *      Author: Maksim Fedarenka
  */
 
@@ -21,6 +21,7 @@ public:
     virtual ~Pin();
     void setOutputMode();
     void setInputMode();
+    void setInputPullupMode();
 
     void setHigh();
     void setLow();

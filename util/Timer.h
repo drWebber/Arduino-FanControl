@@ -14,6 +14,8 @@ public:
     Timer() {};
     void setSecondsInterval(uint8_t seconds);
     void setMinutesInterval(uint8_t minutes);
+    void setMillisecondsInterval(uint16_t minutes);
+    unsigned long getMillisecondsInterval();
     bool isTimeOut();
 };
 

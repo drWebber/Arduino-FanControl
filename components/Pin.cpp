@@ -1,8 +1,8 @@
 /*
  * Pin.cpp
  *
- *  Created on: 4 февр. 2018 г.
- *      Author: Макс
+ *  Created on: 4 пїЅпїЅпїЅпїЅ. 2018 пїЅ.
+ *      Author: пїЅпїЅпїЅпїЅ
  */
 #include "Pin.h"
 
@@ -35,6 +35,10 @@ uint8_t Pin::dlRead() {
     return digitalRead(index);
 }
 
+uint16_t Pin::agRead() {
+    return analogRead(index);
+}
+
 void Pin::setOutputMode() {
     pinMode(index, OUTPUT);
 }
@@ -43,8 +47,8 @@ void Pin::setInputMode() {
     pinMode(index, INPUT);
 }
 
-uint16_t Pin::agRead() {
-    return analogRead(index);
+void Pin::setInputPullupMode() {
+    pinMode(index, INPUT_PULLUP);
 }
 
 } /* namespace components */
