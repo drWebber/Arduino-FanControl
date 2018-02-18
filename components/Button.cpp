@@ -37,16 +37,18 @@ void Button::execute() {
     if (debounceTimer.isTimeOut()) {
         bool currentState = !pin->dlRead();
 
+        if (!currentState && lastState && !holded) {
+            pressed = true;
+            prevState = !prevState;
+        } else if (!currentState && lastState && holded) {
+            holded = false;
+        }
+
         if (holdTimer.isTimeOut() && currentState && lastState && !pressed) {
             holded = true;
         }
 
-        if (!currentState && lastState && !holded) {
-            pressed = true;
-            prevState = !prevState;
-            holdTimer.setMillisecondsInterval(holdDelay);
-        } else if (!currentState && lastState && holded) {
-            holded = false;
+        if (!holded  && !currentState) {
             holdTimer.setMillisecondsInterval(holdDelay);
         }
 
