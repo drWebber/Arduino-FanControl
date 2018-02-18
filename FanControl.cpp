@@ -4,12 +4,16 @@
 #include "components/DHT11.h"
 #include "components/Relay.h"
 #include "components/Fan.h"
+#include "components/Button.h"
 #include "util/EepromLogger.h"
 #include "util/ValueWatcher.h"
+#include "util/Timer.h" //TODO DEBUG ÄËß ËÎÃÎÂ
 #include "Room.h"
 
 using namespace components;
 using namespace util;
+
+uint8_t cntr = 0; //TODO DEBUG
 
 DHT11 *dht = new DHT11(new Pin(5));
 AnalogSensor *mqSensor = new AnalogSensor(new Pin(A6), 500);
@@ -17,6 +21,11 @@ AnalogSensor *lightSensor = new AnalogSensor(new Pin(A7), 900);
 Relay *relay = new Relay(new Pin(4));
 Fan *fan = new Fan(relay);
 Room bathroom = Room();
+
+Button btn1 = Button(new Pin(7)); //TODO DEBUG ÄËß ËÎÃÎÂ
+Button btn2 = Button(new Pin(8)); //TODO DEBUG ÄËß ËÎÃÎÂ
+
+Timer loggTimer = Timer();
 
 EepromLogger *tempLogger;
 EepromLogger *humidLogger;
@@ -40,35 +49,40 @@ void setup() {
 	humidLogger = new EepromLogger(200, 100, 2, 1024);
 	smokeLogger = new EepromLogger(400, 100, 2, 1024);
 
-	tempWatcher = new ValueWatcher(tempLogger, 30,
+	tempWatcher = new ValueWatcher(tempLogger, 60,
 	        LogType::VALUE_FALLING);
-	humidWatcher = new ValueWatcher(humidLogger, 30,
+	humidWatcher = new ValueWatcher(humidLogger, 60,
 	        LogType::VALUE_FALLING);
 	smokeWatcher = new ValueWatcher(smokeLogger, 30,
 	        LogType::VALUE_FALLING);
+
+	loggTimer.setSecondsInterval(1); //TODO DEBUG ÄËß ËÎÃÎÂ
 }
 
 void loop() {
-	bathroom.serve();
+    btn1.execute(); //TODO DEBUG ÄËß ËÎÃÎÂ
+    btn2.execute(); //TODO DEBUG ÄËß ËÎÃÎÂ
 
-	delay(250);
-	if (bathroom.getDht()->read()) {
-	    uint8_t humidity = bathroom.getDht()->getHumidity();
-	    uint8_t temperature = bathroom.getDht()->getTemperature();
-	    Serial.print("temp: ");
-	    Serial.println(temperature);
-        Serial.print("humdty: ");
-        Serial.println(humidity);
-        tempWatcher->log(temperature);
-        humidWatcher->log(humidity);
-	} else {
-        Serial.println("DHT READING ERROR");
-	}
-	int16_t air = bathroom.getMqSensor()->read();
-	smokeWatcher->log(air);
-    Serial.print("air: ");
-    Serial.println(air);
-	Serial.println("-----------------------");  //TODO debug
+	bathroom.serve();
+	if (loggTimer.isTimeOut()) {
+	    if (bathroom.getDht()->read()) {
+	        uint8_t humidity = bathroom.getDht()->getHumidity();
+	        uint8_t temperature = bathroom.getDht()->getTemperature();
+	        Serial.print("temp: ");
+	        Serial.println(temperature);
+	        Serial.print("humdty: ");
+	        Serial.println(humidity);
+	        tempWatcher->log(temperature);
+	        humidWatcher->log(humidity);
+	    } else {
+	        Serial.println("DHT READING ERROR");
+	    }
+	    int16_t air = bathroom.getMqSensor()->read();
+	    smokeWatcher->log(air);
+	    Serial.print("air: ");
+	    Serial.println(air);
+	    Serial.println("-----------------------");  //TODO debug
+    }
 
 	if (Serial.available()) {
 	    int8_t s = Serial.read();
@@ -86,5 +100,4 @@ void loop() {
             smokeLogger->clearLog();
         }
     }
-	delay(1000);
 }
