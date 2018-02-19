@@ -14,7 +14,16 @@ void Timer::setMinutesInterval(uint8_t minutes)
     nextEvent = millis() + interval;
 }
 
-boolean Timer::isTimeOut()
+void Timer::setMillisecondsInterval(uint16_t milliSeconds) {
+    this->interval = milliSeconds;
+    nextEvent = millis() + interval;
+}
+
+unsigned long Timer::getMillisecondsInterval() {
+    return interval;
+}
+
+bool Timer::isTimeOut()
 {
     if (millis() > nextEvent) {
         nextEvent = millis() + interval;

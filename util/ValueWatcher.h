@@ -59,7 +59,6 @@ private:
 public:
 	ValueWatcher(EepromLogger *logger, uint8_t logInterval = 30,
 	        LogType logType = VALUE_FALLING);
-	virtual ~ValueWatcher();
 
 	uint8_t getLogInterval() const;
 	void setLogInterval(uint8_t logInterval);

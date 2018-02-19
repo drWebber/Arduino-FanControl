@@ -24,9 +24,6 @@ private:
     bool isRequiredVentilation();
     void airCheck();
 public:
-    Room();
-    virtual ~Room();
-
     void setDht(DHT11 *dht);
     void setLightSensor(AnalogSensor *lightSensor);
     void setMqSensor(AnalogSensor *mqSensor);
