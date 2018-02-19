@@ -1,8 +1,8 @@
 /*
  * Room.h
  *
- *  Created on: 14 τεβπ. 2018 γ.
- *      Author: Μΰκρ
+ *  Created on: 14 Ρ„ΠµΠ²Ρ€. 2018 Π³.
+ *      Author: ΠΠ°ΠΊΡ
  */
 
 #ifndef ROOM_H_
@@ -33,9 +33,9 @@ public:
     void setFan(Fan *fan);
 
     void serve();
-	const DHT11 *getDht() const;
-	const AnalogSensor *getLightSensor() const;
-	const AnalogSensor *getMqSensor() const;
+	DHT11 *getDht() const;
+	AnalogSensor *getLightSensor() const;
+	AnalogSensor *getMqSensor() const;
 };
 
 } /* namespace components */

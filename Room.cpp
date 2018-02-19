@@ -1,8 +1,8 @@
 /*
  * Room.cpp
  *
- *  Created on: 14 ÙÂ‚. 2018 „.
- *      Author: Ã‡ÍÒ
+ *  Created on: 14 —Ñ–µ–≤—Ä. 2018 –≥.
+ *      Author: –ú–∞–∫—Å
  */
 
 #include "Room.h"
@@ -56,7 +56,7 @@ void Room::airCheck() {
             if (lightSensor->isBelowValue()) {
                 Serial.println("Light is detected"); //TODO debug
                 if (isRequiredVentilation()) {
-                    fan->turnOn(1); //TODO ËÁÏÂÌËÚ¸ ‚ÂÏˇ ‚ÂÌÚËÎˇˆËË
+                    fan->turnOn(1); //TODO –∏–∑–º–µ–Ω–∏—Ç—å –≤—Ä–µ–º—è –≤–µ–Ω—Ç–∏–ª—è—Ü–∏–∏
                 }
             } else {
                 Serial.println("Light isn't detected"); //TODO debug
@@ -85,15 +85,15 @@ bool Room::isRequiredVentilation() {
     return false;
 }
 
-const DHT11 *Room::getDht() const {
+DHT11 *Room::getDht() const {
 	return dht;
 }
 
-const AnalogSensor *Room::getLightSensor() const {
+AnalogSensor *Room::getLightSensor() const {
 	return lightSensor;
 }
 
-const AnalogSensor *Room::getMqSensor() const {
+AnalogSensor *Room::getMqSensor() const {
 	return mqSensor;
 }
 

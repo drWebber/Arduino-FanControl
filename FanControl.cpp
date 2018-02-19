@@ -1,12 +1,15 @@
-#include <Arduino.h>
-
+// Do not remove the include below
+#include "FanControl.h"
 #include "components/Pin.h"
 #include "components/DHT11.h"
 #include "components/Relay.h"
 #include "components/Fan.h"
+#include "util/EepromLogger.h"
+#include "util/ValueWatcher.h"
 #include "Room.h"
 
 using namespace components;
+using namespace util;
 
 DHT11 *dht = new DHT11(new Pin(5));
 AnalogSensor *mqSensor = new AnalogSensor(new Pin(A6), 300);
@@ -15,18 +18,71 @@ Relay *relay = new Relay(new Pin(4));
 Fan *fan = new Fan(relay);
 Room bathroom = Room();
 
+EepromLogger *tempLogger;
+EepromLogger *humidLogger;
+EepromLogger *smokeLogger;
+
+ValueWatcher *tempWatcher = new ValueWatcher(tempLogger, 30,
+        LogType::VALUE_FALLING);
+ValueWatcher *humidWatcher = new ValueWatcher(humidLogger, 30,
+        LogType::VALUE_FALLING);
+ValueWatcher *smokeWatcher = new ValueWatcher(smokeLogger, 30,
+        LogType::VALUE_FALLING);
+
+
 void setup() {
-    bathroom.setLightSensor(lightSensor);
-    bathroom.setMqSensor(mqSensor);
-    dht->setHumidityThreshold(70);
-    dht->setTemperatureThreshold(27);
-    bathroom.setDht(dht);
-    bathroom.setFan(fan);
-    Serial.begin(9600);  //TODO debug
+	bathroom.setLightSensor(lightSensor);
+	bathroom.setMqSensor(mqSensor);
+	dht->setHumidityThreshold(70);
+	dht->setTemperatureThreshold(27);
+	bathroom.setDht(dht);
+	bathroom.setFan(fan);
+
+	Serial.begin(9600);  //TODO debug
+	tempLogger  = new EepromLogger(0, 50);
+	humidLogger = new EepromLogger(50, 50);
+	smokeLogger = new EepromLogger(100, 50);
 }
 
 void loop() {
-    bathroom.serve();
-    Serial.println("-----------------------");  //TODO debug
-    delay(5000); //TODO debug
+	bathroom.serve();
+
+	delay(500);
+	if (bathroom.getDht()->read()) {
+	    uint8_t humidity = bathroom.getDht()->getHumidity();
+	    uint8_t temperature = bathroom.getDht()->getTemperature();
+	    Serial.print("temp: ");
+	    Serial.println(temperature);
+        Serial.print("humdty: ");
+        Serial.println(humidity);
+        tempWatcher->log(temperature);
+        humidWatcher->log(humidity);
+	} else {
+        Serial.println("DHT READING ERROR");
+	}
+	smokeWatcher->log(bathroom.getMqSensor()->read());
+	Serial.println("-----------------------");  //TODO debug
+
+	if (Serial.available()) {
+	    int8_t s = Serial.read();
+        if (s == 0x31) { // 1
+            tempLogger->printLog();
+            humidLogger->printLog();
+            smokeLogger->printLog();
+        } else if (s == 0x32) { //2
+            tempLogger->printChangesLog();
+            humidLogger->printChangesLog();
+            smokeLogger->printChangesLog();
+        } else if (s == 0x33) { //3
+            tempLogger->clearLog();
+            humidLogger->clearLog();
+            smokeLogger->clearLog();
+        }
+    }
+
+	while (Serial.read() != 0x34) {
+	    delay(500);
+	}
+
+	delay(1000); //TODO debug
 }

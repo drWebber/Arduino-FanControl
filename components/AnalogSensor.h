@@ -21,7 +21,7 @@ public:
     AnalogSensor(Pin *dhtPin, uint16_t threshold);
     virtual ~AnalogSensor();
     const Pin *getPin() const;
-    void setPin(const Pin *pin);
+    void setPin(Pin *pin);
     void setThreshold(uint16_t threshold);
 
     virtual bool isAboveValue();

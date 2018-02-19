@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-namespace components {
+namespace util {
 
 void Timer::setSecondsInterval(uint8_t seconds)
 {
@@ -23,4 +23,4 @@ boolean Timer::isTimeOut()
     return false;
 }
 
-} /* namespace components */
+} /* namespace util */

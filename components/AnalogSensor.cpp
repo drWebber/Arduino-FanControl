@@ -34,7 +34,7 @@ const Pin *AnalogSensor::getPin() const {
     return pin;
 }
 
-void AnalogSensor::setPin(const Pin *pin) {
+void AnalogSensor::setPin(Pin *pin) {
     this->pin = pin;
 }
 

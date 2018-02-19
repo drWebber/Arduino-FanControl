@@ -19,7 +19,7 @@ class Fan {
 private:
     Relay *relay = NULL;
     bool turnedOn = false;
-    Timer *timer = NULL;
+    util::Timer *timer = NULL;
 public:
     Fan(Relay *relay);
     virtual ~Fan();
@@ -30,7 +30,7 @@ public:
 
     bool isTurnedOn();
 
-    Timer *getTimer();
+    util::Timer *getTimer();
 };
 
 } /* namespace components */

@@ -1,7 +1,7 @@
 /*
  * DHT11.h
  *
- *  Created on: 4 февр. 2018 г.
+ *  Created on: 4 С„РµРІСЂ. 2018 Рі.
  *      Author: Maksim Fedarenka
  */
 
@@ -23,7 +23,7 @@ private:
 public:
     DHT11(Pin *dhtPin);
 
-    uint8_t read();
+    bool read();
     uint8_t getHumidity() const;
     uint8_t getTemperature() const;
     void setHumidityThreshold(uint8_t humidityThreshold);

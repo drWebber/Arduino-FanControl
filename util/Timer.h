@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-namespace components {
+namespace util {
 
 class Timer
 {
@@ -17,6 +17,6 @@ public:
     boolean isTimeOut();
 };
 
-} /* namespace components */
+} /* namespace util */
 
 #endif // COMPONENTS_TIMER_H
