@@ -4,22 +4,22 @@ namespace util {
 
 void Timer::setSecondsInterval(uint8_t seconds)
 {
-    this->interval = seconds * 1000;
+    interval = static_cast<unsigned long>(seconds) * 1000;
     nextEvent = millis() + interval;
 }
 
 void Timer::setMinutesInterval(uint8_t minutes)
 {
-    interval = minutes * 60000;
+    interval = static_cast<unsigned long>(minutes) * 60000;
     nextEvent = millis() + interval;
 }
 
 void Timer::setMillisecondsInterval(uint16_t milliSeconds) {
-    this->interval = milliSeconds;
+    interval = static_cast<unsigned long>(milliSeconds);
     nextEvent = millis() + interval;
 }
 
-unsigned long Timer::getMillisecondsInterval() {
+unsigned long Timer::getInterval() {
     return interval;
 }
 

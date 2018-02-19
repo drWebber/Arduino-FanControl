@@ -42,6 +42,7 @@ void ValueWatcher::log(int16_t currentValue) {
     if ((localMinimum && logType == VALUE_RISING)
             || (localMaximum && logType == VALUE_FALLING)) {
         logger->clearChangesLog();
+        delete timer;
         timer = new Timer();
         timer->setSecondsInterval(logInterval);
     }

@@ -23,7 +23,7 @@ Room bathroom;
 Button btn1 = Button(new Pin(7)); //TODO DEBUG ��� �����
 Button btn2 = Button(new Pin(8)); //TODO DEBUG ��� �����
 
-Timer loggTimer = Timer();
+Timer logTimer;
 
 EepromLogger *tempLogger;
 EepromLogger *humidLogger;
@@ -57,7 +57,7 @@ void setup() {
 	smokeWatcher = new ValueWatcher(smokeLogger, 30,
 	        LogType::VALUE_FALLING);
 
-	loggTimer.setSecondsInterval(1); //TODO DEBUG ��� �����
+	logTimer.setSecondsInterval(1); //TODO DEBUG ��� �����
 }
 
 void loop() {
@@ -65,17 +65,17 @@ void loop() {
     btn2.execute(); //TODO DEBUG ��� �����
 
 	bathroom.serve();
-	if (loggTimer.isTimeOut()) {
+	if (logTimer.isTimeOut()) {
 	    if (bathroom.getDht()->read()) {
 	        humidity = bathroom.getDht()->getHumidity();
 	        temperature = bathroom.getDht()->getTemperature();
-	        tempWatcher->log(temperature);
-	        humidWatcher->log(humidity);
+//	        tempWatcher->log(temperature);
+//	        humidWatcher->log(humidity);
 	    } else {
 	        Serial.println("DHT READING ERROR");
 	    }
 	    air = bathroom.getMqSensor()->read();
-	    smokeWatcher->log(air);
+//	    smokeWatcher->log(air);
     }
 
 	if (Serial.available()) {

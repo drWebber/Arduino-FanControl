@@ -1,8 +1,8 @@
 /*
  * Button.cpp
  *
- *  Created on: 18 февр. 2018 г.
- *      Author: Макс
+ *  Created on: 18 пїЅпїЅпїЅпїЅ. 2018 пїЅ.
+ *      Author: пїЅпїЅпїЅпїЅ
  */
 
 #include "Button.h"
@@ -30,7 +30,7 @@ bool Button::isHolded() {
 }
 
 void Button::execute() {
-    if (holdTimer.getMillisecondsInterval() == 0) {
+    if (holdTimer.getInterval() == 0) {
         holdTimer.setMillisecondsInterval(holdDelay);
     }
 
