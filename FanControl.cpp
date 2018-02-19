@@ -79,20 +79,20 @@ void loop() {
     }
 
 	if (Serial.available()) {
-	    int8_t s = Serial.read();
-        if (s == 0x31) { // 1
+	    char c = Serial.read();
+        if (c == '1') {
             tempLogger->printLog();
             humidLogger->printLog();
             smokeLogger->printLog();
-        } else if (s == 0x32) { //2
+        } else if (c == '2') {
             tempLogger->printChangesLog();
             humidLogger->printChangesLog();
             smokeLogger->printChangesLog();
-        } else if (s == 0x33) { //3
+        } else if (c == '3') {
             tempLogger->clearLog();
             humidLogger->clearLog();
             smokeLogger->clearLog();
-        } else if (s == 0x34) { //4
+        } else if (c == '4') {
             Serial.print("temp: ");  //TODO debug
             Serial.println(temperature);  //TODO debug
             Serial.print("humdty: ");  //TODO debug
