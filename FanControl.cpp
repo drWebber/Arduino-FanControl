@@ -5,8 +5,8 @@
 #include "components/Relay.h"
 #include "components/Fan.h"
 #include "components/Button.h"
-#include "util/EepromLogger.h"
-#include "util/ValueWatcher.h"
+#include "util/EepromLogger.h" //TODO DEBUG ��� �����
+#include "util/ValueWatcher.h" //TODO DEBUG ��� �����
 #include "util/Timer.h" //TODO DEBUG ��� �����
 #include "Room.h"
 
@@ -45,7 +45,10 @@ uint8_t humidity;
 int16_t air1;
 int16_t air2;
 
+bool erased = false; //TODO LOGGER
+
 void setup() {
+<<<<<<< HEAD
 	bathroom.setLightSensor(lightSensor1);
 	bathroom.setMqSensor(mqSensor1);
 	dht->setHumidityThreshold(85);
@@ -58,13 +61,27 @@ void setup() {
 	privy.setMqSensor(mqSensor2);
 	mqSensor2->setThreshold(250);
 	privy.setFan(fan2);
+=======
+    Serial.begin(9600);  //TODO debug
+>>>>>>> branch 'master' of https://github.com/drWebber/Arduino-FanControl.git
 
+<<<<<<< HEAD
 	Serial.begin(9600);  //TODO debug
 	tempLogger  = new EepromLogger(0, 100, 2, 1024);
 	humidLogger = new EepromLogger(200, 100, 2, 1024);
 	smokeLogger1 = new EepromLogger(400, 100, 2, 1024);
 	smokeLogger2 = new EepromLogger(600, 100, 2, 1024);
+=======
+    bathroom.setLightSensor(lightSensor);
+    bathroom.setMqSensor(mqSensor);
+    dht->setHumidityThreshold(85);
+    dht->setTemperatureThreshold(27);
+    bathroom.setDht(dht);
+    bathroom.setFan(fan);
+    bathroom.setFanControlButton(&btn2);
+>>>>>>> branch 'master' of https://github.com/drWebber/Arduino-FanControl.git
 
+<<<<<<< HEAD
 	tempWatcher = new ValueWatcher(tempLogger, 60,
 	        LogType::VALUE_FALLING);
 	humidWatcher = new ValueWatcher(humidLogger, 60,
@@ -73,14 +90,27 @@ void setup() {
 	        LogType::VALUE_FALLING);
     smokeWatcher2 = new ValueWatcher(smokeLogger2, 30,
             LogType::VALUE_FALLING);
+=======
+    tempLogger  = new EepromLogger(0, 100, 2, 1024);
+    humidLogger = new EepromLogger(200, 100, 2, 1024);
+    smokeLogger = new EepromLogger(400, 100, 2, 1024);
+>>>>>>> branch 'master' of https://github.com/drWebber/Arduino-FanControl.git
 
-	logTimer.setSecondsInterval(1); //TODO DEBUG ��� �����
+    tempWatcher = new ValueWatcher(tempLogger, 60,
+            LogType::VALUE_FALLING);
+    humidWatcher = new ValueWatcher(humidLogger, 60,
+            LogType::VALUE_FALLING);
+    smokeWatcher = new ValueWatcher(smokeLogger, 30,
+            LogType::VALUE_FALLING);
+
+    logTimer.setSecondsInterval(1); //TODO DEBUG ��� �����
 }
 
 void loop() {
     btn1.execute(); //TODO DEBUG ��� �����
     btn2.execute(); //TODO DEBUG ��� �����
 
+<<<<<<< HEAD
 	bathroom.serve();
 	privy.serve();
 	if (logTimer.isTimeOut()) {
@@ -94,10 +124,39 @@ void loop() {
 	    }
 	    air1 = bathroom.getMqSensor()->read();
 //	    smokeWatcher->log(air);
+=======
+    bathroom.serve();
+
+    if (btn1.isHolded() && !erased) {
+        erased = true;
+        tempLogger->clearLog();
+        humidLogger->clearLog();
+        smokeLogger->clearLog();
+>>>>>>> branch 'master' of https://github.com/drWebber/Arduino-FanControl.git
     }
 
-	if (Serial.available()) {
-	    char c = Serial.read();
+    //TODO DELETE LOGGER BELOW
+    if (btn1.getPreviousState()) {
+        if (logTimer.isTimeOut()) {
+            digitalWrite(13, HIGH);
+            if (bathroom.getDht()->read()) {
+                humidity = bathroom.getDht()->getHumidity();
+                temperature = bathroom.getDht()->getTemperature();
+                air = bathroom.getMqSensor()->read();
+            } else {
+                Serial.println("DHT READING ERROR");
+            }
+            erased = false;
+            tempWatcher->log(temperature);
+            humidWatcher->log(humidity);
+            smokeWatcher->log(air);
+        } else {
+            digitalWrite(13, LOW);
+        }
+    }
+
+    if (Serial.available()) {
+        char c = Serial.read();
         if (c == '1') {
             tempLogger->printLog();
             humidLogger->printLog();
@@ -109,6 +168,7 @@ void loop() {
             smokeLogger1->printChangesLog();
             smokeLogger2->printChangesLog();
         } else if (c == '3') {
+<<<<<<< HEAD
             tempLogger->clearLog();
             humidLogger->clearLog();
             smokeLogger1->clearLog();
@@ -123,6 +183,15 @@ void loop() {
             Serial.print("air2: ");  //TODO debug
             Serial.println(air2);  //TODO debug
             Serial.println("-----------------------");  //TODO debug
+=======
+            Serial.print("temp: ");
+            Serial.println(temperature);
+            Serial.print("humdty: ");
+            Serial.println(humidity);
+            Serial.print("air: ");
+            Serial.println(air);
+            Serial.println("-----------------------");
+>>>>>>> branch 'master' of https://github.com/drWebber/Arduino-FanControl.git
         }
     }
 }

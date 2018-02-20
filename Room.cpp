@@ -25,8 +25,20 @@ void Room::setFan(Fan *fan) {
     this->fan = fan;
 }
 
+void Room::setFanControlButton(Button* btn) {
+    this->fanCtrlBtn = btn;
+}
+
 void Room::serve() {
-    /* fan serving */
+    if (fanCtrlBtn != NULL) {
+        if (fanCtrlBtn->isPressed()) {
+            Serial.println("isPressed");
+            fan->turnOn(3);
+        }
+        if (fanCtrlBtn->isHolded()) {
+            fan->turnOff();
+        }
+    }
     airCheck();
 }
 
