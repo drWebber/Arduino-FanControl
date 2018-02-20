@@ -13,7 +13,7 @@ Button::Button(Pin* pin, uint16_t holdDelay) {
     this->pin = pin;
     this->holdDelay = holdDelay;
     pin->setInputPullupMode();
-    debounceTimer.setMillisecondsInterval(10);
+    debounceTimer.setMillisecondsInterval(20);
     holdTimer.setMillisecondsInterval(0);
 }
 
