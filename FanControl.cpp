@@ -5,8 +5,8 @@
 #include "components/Relay.h"
 #include "components/Fan.h"
 #include "components/Button.h"
-#include "util/EepromLogger.h"
-#include "util/ValueWatcher.h"
+#include "util/EepromLogger.h" //TODO DEBUG ��� �����
+#include "util/ValueWatcher.h" //TODO DEBUG ��� �����
 #include "util/Timer.h" //TODO DEBUG ��� �����
 #include "Room.h"
 
@@ -37,49 +37,68 @@ uint8_t temperature;
 uint8_t humidity;
 int16_t air;
 
+bool erased = false; //TODO LOGGER
+
 void setup() {
-	bathroom.setLightSensor(lightSensor);
-	bathroom.setMqSensor(mqSensor);
-	dht->setHumidityThreshold(85);
-	dht->setTemperatureThreshold(27);
-	bathroom.setDht(dht);
-	bathroom.setFan(fan);
+    Serial.begin(9600);  //TODO debug
 
-	Serial.begin(9600);  //TODO debug
-	tempLogger  = new EepromLogger(0, 100, 2, 1024);
-	humidLogger = new EepromLogger(200, 100, 2, 1024);
-	smokeLogger = new EepromLogger(400, 100, 2, 1024);
+    bathroom.setLightSensor(lightSensor);
+    bathroom.setMqSensor(mqSensor);
+    dht->setHumidityThreshold(85);
+    dht->setTemperatureThreshold(27);
+    bathroom.setDht(dht);
+    bathroom.setFan(fan);
+    bathroom.setFanControlButton(&btn2);
 
-	tempWatcher = new ValueWatcher(tempLogger, 60,
-	        LogType::VALUE_FALLING);
-	humidWatcher = new ValueWatcher(humidLogger, 60,
-	        LogType::VALUE_FALLING);
-	smokeWatcher = new ValueWatcher(smokeLogger, 30,
-	        LogType::VALUE_FALLING);
+    tempLogger  = new EepromLogger(0, 100, 2, 1024);
+    humidLogger = new EepromLogger(200, 100, 2, 1024);
+    smokeLogger = new EepromLogger(400, 100, 2, 1024);
 
-	logTimer.setSecondsInterval(1); //TODO DEBUG ��� �����
+    tempWatcher = new ValueWatcher(tempLogger, 60,
+            LogType::VALUE_FALLING);
+    humidWatcher = new ValueWatcher(humidLogger, 60,
+            LogType::VALUE_FALLING);
+    smokeWatcher = new ValueWatcher(smokeLogger, 30,
+            LogType::VALUE_FALLING);
+
+    logTimer.setSecondsInterval(1); //TODO DEBUG ��� �����
 }
 
 void loop() {
     btn1.execute(); //TODO DEBUG ��� �����
     btn2.execute(); //TODO DEBUG ��� �����
 
-	bathroom.serve();
-	if (logTimer.isTimeOut()) {
-	    if (bathroom.getDht()->read()) {
-	        humidity = bathroom.getDht()->getHumidity();
-	        temperature = bathroom.getDht()->getTemperature();
-//	        tempWatcher->log(temperature);
-//	        humidWatcher->log(humidity);
-	    } else {
-	        Serial.println("DHT READING ERROR");
-	    }
-	    air = bathroom.getMqSensor()->read();
-//	    smokeWatcher->log(air);
+    bathroom.serve();
+
+    if (btn1.isHolded() && !erased) {
+        erased = true;
+        tempLogger->clearLog();
+        humidLogger->clearLog();
+        smokeLogger->clearLog();
     }
 
-	if (Serial.available()) {
-	    char c = Serial.read();
+    //TODO DELETE LOGGER BELOW
+    if (btn1.getPreviousState()) {
+        if (logTimer.isTimeOut()) {
+            digitalWrite(13, HIGH);
+            if (bathroom.getDht()->read()) {
+                humidity = bathroom.getDht()->getHumidity();
+                temperature = bathroom.getDht()->getTemperature();
+                air = bathroom.getMqSensor()->read();
+            } else {
+                Serial.println("DHT READING ERROR");
+            }
+            erased = false;
+            tempWatcher->log(temperature);
+            humidWatcher->log(humidity);
+            smokeWatcher->log(air);
+        } else {
+            digitalWrite(13, LOW);
+        }
+    }
+
+    if (Serial.available()) {
+        char c = Serial.read();
         if (c == '1') {
             tempLogger->printLog();
             humidLogger->printLog();
@@ -89,17 +108,13 @@ void loop() {
             humidLogger->printChangesLog();
             smokeLogger->printChangesLog();
         } else if (c == '3') {
-            tempLogger->clearLog();
-            humidLogger->clearLog();
-            smokeLogger->clearLog();
-        } else if (c == '4') {
-            Serial.print("temp: ");  //TODO debug
-            Serial.println(temperature);  //TODO debug
-            Serial.print("humdty: ");  //TODO debug
-            Serial.println(humidity);  //TODO debug
-            Serial.print("air: ");  //TODO debug
-            Serial.println(air);  //TODO debug
-            Serial.println("-----------------------");  //TODO debug
+            Serial.print("temp: ");
+            Serial.println(temperature);
+            Serial.print("humdty: ");
+            Serial.println(humidity);
+            Serial.print("air: ");
+            Serial.println(air);
+            Serial.println("-----------------------");
         }
     }
 }

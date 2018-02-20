@@ -9,6 +9,9 @@
 #define COMPONENTS_DHT11_H_
 
 #include "Pin.h"
+#include "../util/Timer.h"
+
+using namespace util;
 
 namespace components {
 
@@ -17,9 +20,9 @@ private:
     Pin *pin = NULL;
     uint8_t temperature = 0;
     uint8_t humidity = 0;
-    bool testDevice(char value);
     uint8_t temperatureThreshold = 0;
     uint8_t humidityThreshold = 0;
+    bool testDevice(char value);
 public:
     DHT11(Pin *dhtPin);
 

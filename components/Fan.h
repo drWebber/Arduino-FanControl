@@ -1,7 +1,7 @@
 /*
  * Fan.h
  *
- *  Created on: 8 февр. 2018 г.
+ *  Created on: 8 пїЅпїЅпїЅпїЅ. 2018 пїЅ.
  *      Author: Maksim Fedarenka
  */
 
@@ -22,7 +22,6 @@ private:
     util::Timer *timer = NULL;
 public:
     Fan(Relay *relay);
-    virtual ~Fan();
     void setRelay(Relay *relay);
 
     void turnOn(uint8_t minutes);
