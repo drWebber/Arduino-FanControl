@@ -53,8 +53,8 @@ void setup() {
     dht->setHumidityThreshold(85);
     dht->setTemperatureThreshold(30);
 
-    mqSensor1->setThreshold(250);
-    mqSensor2->setThreshold(250);
+    mqSensor1->setThreshold(160);
+    mqSensor2->setThreshold(160);
 
 	bathroom.setLightSensor(lightSensor1);
 	bathroom.setMqSensor(mqSensor1);
