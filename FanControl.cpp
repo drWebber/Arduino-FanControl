@@ -1,4 +1,3 @@
-// Do not remove the include below
 #include "FanControl.h"
 #include "components/Pin.h"
 #include "components/DHT11.h"
@@ -13,7 +12,7 @@
 using namespace components;
 using namespace util;
 
-DHT11 *dht = new DHT11(new Pin(5));
+DHT11 *dht = new DHT11(new Pin(5), 10);
 AnalogSensor *mqSensor1 = new AnalogSensor(new Pin(A6), 500);
 AnalogSensor *mqSensor2 = new AnalogSensor(new Pin(A4), 500);
 AnalogSensor *lightSensor1 = new AnalogSensor(new Pin(A7), 900);
@@ -87,6 +86,7 @@ void setup() {
 void loop() {
     btn1.execute(); //TODO DEBUG ��� �����
     btn2.execute(); //TODO DEBUG ��� �����
+    bathroom.getDht()->execute();
 
     bathroom.serve();
     privy.serve();
@@ -103,7 +103,7 @@ void loop() {
     if (btn1.getPreviousState()) {
         if (logTimer.isTimeOut()) {
             digitalWrite(13, HIGH);
-            if (bathroom.getDht()->read()) {
+            if (!bathroom.getDht()->isError()) {
                 humidity = bathroom.getDht()->getHumidity();
                 temperature = bathroom.getDht()->getTemperature();
                 air1 = bathroom.getMqSensor()->read();
