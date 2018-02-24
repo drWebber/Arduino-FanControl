@@ -64,7 +64,7 @@ void Room::airCheck() {
 
 bool Room::isRequiredVentilation() {
     if (dht != NULL) {
-        if (dht->read()) {
+        if (!dht->isError()) {
             if (dht->isAboveValue()) {
                 return true;
             }

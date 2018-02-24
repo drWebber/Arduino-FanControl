@@ -22,11 +22,14 @@ private:
     uint8_t humidity = 0;
     uint8_t temperatureThreshold = 0;
     uint8_t humidityThreshold = 0;
-    bool testDevice(char value);
+    util::Timer measurmentsDelay;
+    util::Timer *delay18 = NULL;
+    bool error = true;
+    bool testDevice(uint8_t value);
 public:
-    DHT11(Pin *dhtPin);
+    DHT11(Pin *dhtPin, uint8_t delay);
 
-    bool read();
+    void execute();
     uint8_t getHumidity() const;
     uint8_t getTemperature() const;
     void setHumidityThreshold(uint8_t humidityThreshold);
@@ -34,6 +37,7 @@ public:
 
     bool isAboveValue();
     bool isBelowValue();
+    bool isError();
 };
 
 } /* namespace components */
