@@ -23,6 +23,7 @@ void Fan::turnOn(uint8_t minutes) {
 
 void Fan::turnOff() {
     relay->switchOff();
+    delete timer;
     timer = NULL;
     turnedOn = false;
 }

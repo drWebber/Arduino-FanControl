@@ -33,7 +33,7 @@ void Room::serve() {
     if (fanCtrlBtn != NULL) {
         if (fanCtrlBtn->isPressed()) {
             Serial.println("isPressed");
-            fan->turnOn(3);
+            fan->turnOn(3); // TODO изменить время вентиляции
         }
         if (fanCtrlBtn->isHolded()) {
             fan->turnOff();

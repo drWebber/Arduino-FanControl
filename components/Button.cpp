@@ -14,7 +14,7 @@ Button::Button(Pin* pin, uint16_t holdDelay) {
     this->holdDelay = holdDelay;
     pin->setInputPullupMode();
     debounceTimer.setMillisecondsInterval(20);
-    holdTimer.setMillisecondsInterval(0);
+    holdTimer.setMillisecondsInterval(holdDelay);
 }
 
 bool Button::isPressed() {
@@ -30,10 +30,6 @@ bool Button::isHolded() {
 }
 
 void Button::execute() {
-    if (holdTimer.getInterval() == 0) {
-        holdTimer.setMillisecondsInterval(holdDelay);
-    }
-
     if (debounceTimer.isTimeOut()) {
         bool currentState = !pin->dlRead();
 
