@@ -9,17 +9,12 @@
 
 namespace components {
 
-components::AnalogSensor::AnalogSensor(Pin *dhtPin, uint16_t threshold) {
-    this->pin = dhtPin;
+AnalogSensor::AnalogSensor(Pin* pin, uint16_t threshold) : Device(pin) {
     this->threshold = threshold;
 }
 
 void AnalogSensor::setThreshold(uint16_t threshold) {
     this->threshold = threshold;
-}
-
-AnalogSensor::~AnalogSensor() {
-    // TODO Auto-generated destructor stub
 }
 
 bool AnalogSensor::isAboveValue() {
@@ -30,12 +25,7 @@ bool AnalogSensor::isBelowValue() {
     return read() <= threshold;
 }
 
-const Pin *AnalogSensor::getPin() const {
-    return pin;
-}
-
-void AnalogSensor::setPin(Pin *pin) {
-    this->pin = pin;
+AnalogSensor::~AnalogSensor() {
 }
 
 uint16_t AnalogSensor::read() {

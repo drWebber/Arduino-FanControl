@@ -1,5 +1,6 @@
 #include "FanControl.h"
 #include "components/Pin.h"
+#include "components/Mq2.h"
 #include "components/DHT11.h"
 #include "components/Relay.h"
 #include "components/Fan.h"
@@ -13,10 +14,10 @@ using namespace components;
 using namespace util;
 
 DHT11 *dht = new DHT11(new Pin(5), 10);
-AnalogSensor *mqSensor1 = new AnalogSensor(new Pin(A6), 500);
-AnalogSensor *mqSensor2 = new AnalogSensor(new Pin(A4), 500);
+Mq2 *mqSensor1 = new Mq2(new Pin(3));
+Mq2 *mqSensor2 = new Mq2(new Pin(9));
 AnalogSensor *lightSensor1 = new AnalogSensor(new Pin(A7), 900);
-AnalogSensor *lightSensor2 = new AnalogSensor(new Pin(A5), 900);
+AnalogSensor *lightSensor2 = new AnalogSensor(new Pin(A6), 900);
 Relay *relay1 = new Relay(new Pin(4));
 Relay *relay2 = new Relay(new Pin(6));
 Fan *fan1 = new Fan(relay1);
@@ -49,11 +50,8 @@ bool erased = false; //TODO LOGGER
 void setup() {
     Serial.begin(9600);  //TODO debug
 
-    dht->setHumidityThreshold(85);
-    dht->setTemperatureThreshold(30);
-
-    mqSensor1->setThreshold(160);
-    mqSensor2->setThreshold(160);
+    dht->setHumidityThreshold(80);
+    dht->setTemperatureThreshold(29);
 
 	bathroom.setLightSensor(lightSensor1);
 	bathroom.setMqSensor(mqSensor1);
@@ -102,20 +100,31 @@ void loop() {
     //TODO DELETE LOGGER BELOW
     if (btn1.getPreviousState()) {
         if (logTimer.isTimeOut()) {
+
+            Serial.print("mq1: ");
+            Serial.println(bathroom.getMqSensor()->read());
+
+            Serial.print("mq2: ");
+            Serial.println(privy.getMqSensor()->read());
+
             digitalWrite(13, HIGH);
             if (!bathroom.getDht()->isError()) {
                 humidity = bathroom.getDht()->getHumidity();
                 temperature = bathroom.getDht()->getTemperature();
-                air1 = bathroom.getMqSensor()->read();
-                air2 = bathroom.getMqSensor()->read();
+                tempWatcher->log(temperature);
+                humidWatcher->log(humidity);
             } else {
                 Serial.println("DHT READING ERROR");
             }
+            if (bathroom.getMqSensor()->isWarmedUp()) {
+                air1 = bathroom.getMqSensor()->read();
+                smokeWatcher1->log(air1);
+            }
+            if (bathroom.getMqSensor()->isWarmedUp()) {
+                air2 = bathroom.getMqSensor()->read();
+                smokeWatcher2->log(air2);
+            }
             erased = false;
-            tempWatcher->log(temperature);
-            humidWatcher->log(humidity);
-            smokeWatcher1->log(air1);
-            smokeWatcher2->log(air2);
         } else {
             digitalWrite(13, LOW);
         }

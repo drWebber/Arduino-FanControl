@@ -17,7 +17,11 @@ void Room::setLightSensor(AnalogSensor* lightSensor) {
     this->lightSensor = lightSensor;
 }
 
-void Room::setMqSensor(AnalogSensor* mqSensor) {
+Mq2 *Room::getMqSensor() const {
+    return mqSensor;
+}
+
+void Room::setMqSensor(Mq2* mqSensor) {
     this->mqSensor = mqSensor;
 }
 
@@ -32,7 +36,7 @@ void Room::setFanControlButton(Button* btn) {
 void Room::serve() {
     if (fanCtrlBtn != NULL) {
         if (fanCtrlBtn->isPressed()) {
-            Serial.println("isPressed");
+            Serial.println("isPressed fan switched on");
             fan->turnOn(3); // TODO изменить время вентиляции
         }
         if (fanCtrlBtn->isHolded()) {
@@ -55,7 +59,7 @@ void Room::airCheck() {
         } else {
             if (lightSensor->isBelowValue()) {
                 if (isRequiredVentilation()) {
-                    fan->turnOn(1); //TODO изменить время вентиляции
+                    fan->turnOn(3); //TODO изменить время вентиляции
                 }
             }
         }
@@ -66,12 +70,16 @@ bool Room::isRequiredVentilation() {
     if (dht != NULL) {
         if (!dht->isError()) {
             if (dht->isAboveValue()) {
+                Serial.println("Air is overheated or too wet");
                 return true;
             }
         }
     }
-    if (mqSensor->isAboveValue()) {
-        return true;
+    if (mqSensor->isWarmedUp()) {
+        if (mqSensor->read()) {
+            Serial.println("Cigarette smoke is detected");
+            return true;
+        }
     }
     return false;
 }
@@ -82,10 +90,6 @@ DHT11 *Room::getDht() const {
 
 AnalogSensor *Room::getLightSensor() const {
 	return lightSensor;
-}
-
-AnalogSensor *Room::getMqSensor() const {
-	return mqSensor;
 }
 
 } /* namespace components */

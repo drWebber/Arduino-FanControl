@@ -75,7 +75,7 @@ void EepromLogger::printLog() const {
 }
 
 void EepromLogger::clearLog() {
-    for (int16_t i = minValIndex; i < lastValIndex; ++i) {
+    for (uint16_t i = minValIndex; i < lastValIndex; ++i) {
         EEPROM.update(i, 0);
     }
     minimum = INT16_MAX;
@@ -85,14 +85,14 @@ void EepromLogger::clearLog() {
 void EepromLogger::clearChangesLog() {
     int16_t indx = maxValIndex + objectSize;
     nextIndex = indx;
-    for (int16_t i = indx; i < lastValIndex; ++i) {
+    for (uint16_t i = indx; i < lastValIndex; ++i) {
         EEPROM.update(i, 0);
     }
 }
 
 void EepromLogger::printChangesLog() const {
     int16_t val = INT16_MIN;
-    for (int16_t i = (maxValIndex + objectSize); i < lastValIndex;
+    for (uint16_t i = (maxValIndex + objectSize); i < lastValIndex;
             i += objectSize) {
         EEPROM.get(i, val);
         Serial.print(val);

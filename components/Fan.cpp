@@ -18,7 +18,7 @@ void Fan::turnOn(uint8_t minutes) {
     turnedOn = true;
     relay->switchOn();
     timer = new util::Timer();
-    timer->setMinutesInterval(minutes);
+    timer->setSecondsInterval(minutes); //TODO переделать на минуты
 }
 
 void Fan::turnOff() {

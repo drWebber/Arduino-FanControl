@@ -9,19 +9,16 @@
 #define COMPONENTS_ANALOGSENSOR_H_
 
 #include "Pin.h"
-
+#include "Device.h"
 
 namespace components {
 
-class AnalogSensor {
+class AnalogSensor : public Device {
 private:
-    Pin *pin;
     uint16_t threshold;
 public:
-    AnalogSensor(Pin *dhtPin, uint16_t threshold);
+    AnalogSensor(Pin *pin, uint16_t threshold);
     virtual ~AnalogSensor();
-    const Pin *getPin() const;
-    void setPin(Pin *pin);
     void setThreshold(uint16_t threshold);
 
     virtual bool isAboveValue();
