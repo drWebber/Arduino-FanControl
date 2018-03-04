@@ -9,8 +9,31 @@
 
 namespace components {
 
-uint8_t components::Mq2::read() {
-    return !pin->dlRead();
+bool components::Mq2::read() {
+    bool state = !pin->dlRead();
+    if (state) {
+        if (debounceTimer == NULL) {
+            debounceTimer = new Timer();
+            debounceTimer->setMillisecondsInterval(250);
+        }
+        if (debounceTimer->isTimeOut()) {
+            if (prevState && state) {
+                prevState = false;
+                delete debounceTimer;
+                debounceTimer = NULL;
+                return true;
+            } else {
+                prevState = state;
+            }
+        }
+    } else {
+        if (debounceTimer != NULL) {
+            delete debounceTimer;
+            debounceTimer = NULL;
+        }
+        prevState = false;
+    }
+    return false;
 }
 
 bool components::Mq2::isWarmedUp() {

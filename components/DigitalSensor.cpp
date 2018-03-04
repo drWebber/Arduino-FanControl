@@ -9,7 +9,7 @@
 
 namespace components {
 
-uint8_t components::DigitalSensor::read() {
+bool components::DigitalSensor::read() {
     return pin->dlRead();
 }
 

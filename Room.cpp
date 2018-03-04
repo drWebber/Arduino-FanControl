@@ -53,7 +53,7 @@ void Room::airCheck() {
                 if (!isRequiredVentilation()) {
                     fan->turnOff();
                 } else {
-                    fan->getTimer()->setMinutesInterval(3);
+                    fan->getTimer()->setMinutesInterval(3); //TODO изменить время вентиляции
                 }
             }
         } else {

@@ -16,7 +16,7 @@ class DigitalSensor: public Device {
 public:
     DigitalSensor(Pin *pin) : Device(pin) { };
     virtual ~DigitalSensor() {};
-    virtual uint8_t read();
+    virtual bool read();
 };
 
 } /* namespace components */
